@@ -49,35 +49,84 @@ function initialPrompt(){
                     viewAllRoles();
                     initialPrompt();
                 }
-                else if(answer.action === "Add a Department"){
+                if(answer.action === "Add a Department"){
                     addDepartment();
+                }
+                if(answer.action === "Add a Role"){
+                    addRole();
                 }
                 }
             )
 };
 
-function addDepartment(){
-    inquirer
-        .prompt([
-            {
-                name: "department",
-                type: "input",
-                message: "What is the name of the department you want add?"
-            }
-        ])
-        .then(function(response){
-            connection.query(
-                "INSERT INTO department SET ?",
-            {
-                name: response.department, 
-            },
-            function(err){
+        function addDepartment(){
+            inquirer
+                .prompt([
+                    {
+                        name: "department",
+                        type: "input",
+                        message: "What is the name of the department you want add?"
+                    }
+                ])
+                .then(function(response){
+                    connection.query(
+                        "INSERT INTO department SET ?",
+                    {
+                        name: response.department, 
+                    },
+                    function(err){
+                        if (err) throw err;
+                        console.log("Department has been updated");
+                        initialPrompt();
+                    }
+                )
+                })
+        };
+
+        function addRole(){
+            connection.query("SELECT * FROM department", function(err, results){
                 if (err) throw err;
-                console.log("Department has been updated");
-                initialPrompt();
-            }
-        )
-        })
-};
+
+            inquirer
+                .prompt([
+                    {
+                        name: "role",
+                        type: "input",
+                        message: "What is the title of the role you want add?"
+                    },
+                    {
+                        name: "salary",
+                        type: "input",
+                        message: "What is the salary of that role?"
+                    },
+                    {
+                        name: "departmentID",
+                        type: "rawlist",
+                        message: "What department does this role fit under?",
+                        choices: function(){
+                            var choiceArray = [];
+                            for (var i = 0; i < results.length; i++){
+                                choiceArray.push(results[i].name);
+                            }
+                            return choiceArray;
+                        }
+                    }
+                ])
+                .then(function(response){
+                    connection.query(
+                        "INSERT INTO role SET ?",
+                    {
+                        title: response.role,
+                        salary: response.salary,
+                    },
+                    function(err){
+                        if (err) throw err;
+                        console.log("Role has been updated");
+                        initialPrompt();
+                    }
+                )
+                })
+            })
+        };
 
 
