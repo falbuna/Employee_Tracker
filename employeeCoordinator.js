@@ -1,39 +1,39 @@
-const mysql = require('mysql');
 const inquirer = require('inquirer');
-const cTable = require('console.table');
+const viewAllEmployees = require("./lib/allEmployees");
+const viewAllDepartments = require("./lib/allDepartments");
+const viewAllRoles = require("./lib/allRoles");
 
-const connectionConfig = {
-    host: "localhost",
-    port: 3307,
-    user: "root",
-    password: "root",
-    database: 'employeedb'
+function initialPrompt(){
+    console.log("Welcome to my App!")
+    inquirer
+        .prompt({
+            name: "action",
+            type: "list",
+            message: "What would you like to do?",
+            choices: [
+                "View all Employees",
+                "View all Departments",
+                "View all Roles",
+                "Add Departments",
+                "Add Roles",
+                "Add Employees",
+                "Update Employee Roles"
+            ]
+        }).then(function(answer){
+            switch (answer.action){
+                case "View all Employees":
+                    viewAllEmployees();
+                    break;
+
+                case "View all Departments":
+                    viewAllDepartments();
+                    break;
+
+                case "View all Roles":
+                    viewAllRoles();
+                    break;
+                }
+            })
 };
 
-const connection = mysql.createConnection(connectionConfig);
-
-connection.connect(function() {
-    connection.query(
-        `
-        SELECT
-        e.id as id,
-        e.first_name as first_name,
-        e.last_name as last_name,
-        role.title as title,
-        department.name as department,
-        role.salary as salary,
-        m.first_name as manager
-    FROM employee e
-    INNER JOIN role ON
-		role.id = e.role_id
-    INNER JOIN department ON 
-        department.id = role.department_id
-	LEFT JOIN employee m ON
-		e.manager_id = m.id;
-        `,
-    function(error, data){
-        console.table(data);
-        connection.end();
-    }
-)
-});
+initialPrompt();
