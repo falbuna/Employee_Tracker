@@ -3,17 +3,9 @@ const inquirer = require('inquirer');
 const viewAllEmployees = require("./lib/allEmployees");
 const viewAllDepartments = require("./lib/allDepartments");
 const viewAllRoles = require("./lib/allRoles");
-// const addDepartment = require("./lib/addDepartment");
-
-const connectionConfig = {
-    host: "localhost",
-    port: 3307,
-    user: "root",
-    password: "root",
-    database: 'employeedb'
-};
-
-const connection = mysql.createConnection(connectionConfig);
+const addDepartment = require("./lib/addDepartment");
+const addRole = require("./lib/addRole");
+const connection = require('./connection');
 
 connection.connect(function(err){
     if (err) throw err;
@@ -38,71 +30,50 @@ function initialPrompt(){
             ]
         }).then(function(answer) {
                 if (answer.action === "View all Employees"){
-                    viewAllEmployees();
-                    initialPrompt();
+                    viewAllEmployees(initialPrompt);
                 }
-                if(answer.action === "View all Departments"){
-                    viewAllDepartments();
-                    initialPrompt();
+                else if(answer.action === "View all Departments"){
+                    viewAllDepartments(initialPrompt);
                 }
-                if(answer.action === "View all Roles"){
-                    viewAllRoles();
-                    initialPrompt();
+                else if(answer.action === "View all Roles"){
+                    viewAllRoles(initialPrompt);
                 }
-                if(answer.action === "Add a Department"){
-                    addDepartment();
+                else if(answer.action === "Add a Department"){
+                    addDepartment(initialPrompt);
                 }
-                if(answer.action === "Add a Role"){
-                    addRole();
+                else if(answer.action === "Add a Role"){
+                    addRole(initialPrompt);
+                }
+                else if (answer.action === "Add an Employee"){
+                    addEmployee();
+                }
+                else if(answer.action === "Exit"){
+                    connection.end();
                 }
                 }
             )
-};
+    };
 
-        function addDepartment(){
-            inquirer
-                .prompt([
-                    {
-                        name: "department",
-                        type: "input",
-                        message: "What is the name of the department you want add?"
-                    }
-                ])
-                .then(function(response){
-                    connection.query(
-                        "INSERT INTO department SET ?",
-                    {
-                        name: response.department, 
-                    },
-                    function(err){
-                        if (err) throw err;
-                        console.log("Department has been updated");
-                        initialPrompt();
-                    }
-                )
-                })
-        };
-
-        function addRole(){
-            connection.query("SELECT * FROM department", function(err, results){
+        function addEmployee(){
+            connection.query("SELECT * FROM role", function(err, results){
                 if (err) throw err;
 
             inquirer
                 .prompt([
                     {
+                        name: "firstName",
+                        type: "input",
+                        message: "What is the first name of the employee you want add?"
+                    },
+                    {
+                        name: "lastName",
+                        type: "input",
+                        message: "What is the last name of the employee you want to add?"
+                    },
+                    {
                         name: "role",
-                        type: "input",
-                        message: "What is the title of the role you want add?"
-                    },
-                    {
-                        name: "salary",
-                        type: "input",
-                        message: "What is the salary of that role?"
-                    },
-                    {
-                        name: "departmentID",
                         type: "rawlist",
-                        message: "What department does this role fit under?",
+                        message: "What is the role of this new employee?",
                         choices: function(){
                             var choiceArray = [];
                             for (var i = 0; i < results.length; i++){
@@ -113,20 +84,26 @@ function initialPrompt(){
                     }
                 ])
                 .then(function(response){
-                    connection.query(
-                        "INSERT INTO role SET ?",
-                    {
-                        title: response.role,
-                        salary: response.salary,
-                    },
-                    function(err){
-                        if (err) throw err;
-                        console.log("Role has been updated");
-                        initialPrompt();
-                    }
-                )
+                    let id;
+                    for (let i = 0; i < results.length; i++){
+                        if (results[i].name === response.department){
+                                id =  results[i].id
+                        }
+                    }    
+                //     connection.query(
+                //         "INSERT INTO role SET ?",
+                //     {
+                //         title: response.role,
+                //         salary: response.salary,
+                //         department_id: id
+                //     },
+                //     function(err){
+                //         if (err) throw err;
+                //         console.log("Role has been updated");
+                //         initialPrompt();
+                //     }
+                // )
                 })
             })
         };
-
 
