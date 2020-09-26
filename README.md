@@ -24,7 +24,23 @@ In order to install this application, the user will need to have Node.js install
 
 To start the application, the user will need to input "node employeeCoordinator.js" in the console.
 
+![Windows Powershell with node employeeCoordinator.js](https://github.com/falbuna/Employee_Tracker/blob/master/Assets/1nodeFirst.png)
+
+The user will then be asked with a list of actions that the user can do. They can view all the employees, departments, or roles. They can add or delete a department, role, or employee. Or they can update an employee's role or their manager.
+
 ![]()
+
+If the user wants to add a department, they will be asked with the name of the new department. If the user wants to add a role, they will be asked with the title of the new role, the salary of the new role, and the department of the new role. If the user wants to add a new employee, they will be asked for the new employees first and last name, their role, and the manager of the new employee.
+
+![]()
+
+If the user wants to update an employee's current role, they will be asked for the employee's name, the new role, and who their new manager will be for the new role. If the user wants to update an employee's manager, they will be asked for the employee they would like to update, and the new manager for that employee.
+
+![]()
+
+If the user wants to delete an employee, they will be asked for the name of the employee they want to delete. If the user wants to delete a role, they will be asked for the role that they want to delete. If the user wants to delete a department, they will be asked for the department that they want to delete.
+
+
 
 ## Questions
 
