@@ -9,6 +9,7 @@ const addDepartment = require("./lib/addDepartment");
 const addRole = require("./lib/addRole");
 const addEmployee = require("./lib/addEmployee");
 const updateEmployee = require("./lib/updateEmployee");
+const updateManager = require("./lib/updateManager");
 const deleteDepartment = require("./lib/deleteDepartment");
 const deleteRole = require("./lib/deleteRole");
 const deleteEmployee = require("./lib/deleteEmployee");
@@ -32,6 +33,7 @@ function initialPrompt(){
                 "Add a Role",
                 "Add an Employee",
                 "Update an Employee's Role",
+                "Update an Employee's Manager",
                 "Delete a Department",
                 "Delete a Role",
                 "Delete an Employee",
@@ -67,6 +69,9 @@ function initialPrompt(){
                 }
                 else if (answer.action === "Delete an Employee"){
                     deleteEmployee(initialPrompt);
+                }
+                else if (answer.action === "Update an Employee's Manager"){
+                    updateManager(initialPrompt);
                 }
                 else if(answer.action === "Exit"){
                     connection.end();
