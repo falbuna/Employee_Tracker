@@ -1,5 +1,7 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
+const connection = require('./connection');
+
 const viewAllEmployees = require("./lib/allEmployees");
 const viewAllDepartments = require("./lib/allDepartments");
 const viewAllRoles = require("./lib/allRoles");
@@ -7,7 +9,7 @@ const addDepartment = require("./lib/addDepartment");
 const addRole = require("./lib/addRole");
 const addEmployee = require("./lib/addEmployee");
 const updateEmployee = require("./lib/updateEmployee");
-const connection = require('./connection');
+const deleteDepartment = require("./lib/deleteDepartment");
 
 connection.connect(function(err){
     if (err) throw err;
@@ -28,6 +30,7 @@ function initialPrompt(){
                 "Add a Role",
                 "Add an Employee",
                 "Update an Employee's Role",
+                "Delete a Department",
                 "Exit"
             ]
         }).then(function(answer) {
@@ -51,6 +54,9 @@ function initialPrompt(){
                 }
                 else if (answer.action === "Update an Employee's Role"){
                     updateEmployee(initialPrompt);
+                }
+                else if (answer.action === "Delete a Department"){
+                    deleteDepartment(initialPrompt);
                 }
                 else if(answer.action === "Exit"){
                     connection.end();
