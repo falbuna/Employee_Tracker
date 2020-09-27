@@ -42,6 +42,8 @@ If the user wants to delete an employee, they will be asked for the name of the 
 
 ![Deleting a department, role, or employee](https://github.com/falbuna/Employee_Tracker/blob/master/Assets/5delete.png)
 
+The user can select Exit on the list of actions to end the application.
+
 ## Questions
 
 If you have any questions regarding this application, please reach me at: falbuna1@gmail.com

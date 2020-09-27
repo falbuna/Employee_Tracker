@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 
+// This is for the connection to the MySQL database that holds all of the information for the queries.
 const connectionConfig = {
     host: "localhost",
     port: 3307,
